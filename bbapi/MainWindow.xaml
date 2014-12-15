@@ -1,0 +1,183 @@
+﻿<Window x:Class="bbapi.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:converters="clr-namespace:bbapi.UI.Converters"
+        xmlns:e="clr-namespace:bbapi.UI.Enums"
+        xmlns:viewModels="clr-namespace:bbapi.UI.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=viewModels:DefaultBloombergViewModel, IsDesignTimeCreatable=True}"
+        Title="Bloomberg API Viewer" Height="800" Width="1000">
+    <Window.Resources>
+
+        <Style TargetType="Label">
+            <Setter Property="Width" Value="90"/>
+        </Style>
+
+        <Style TargetType="DatePicker">
+            <Setter Property="Margin" Value="0 5 0 0"/>
+            <Setter Property="BorderBrush" Value="DarkGray"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="0 5 0 0"/>
+            <Setter Property="BorderBrush" Value="DarkGray"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5 5 0 0"/>
+        </Style>
+
+        <Style x:Key="Log" TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Height" Value="Auto"/>
+            <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        </Style>
+
+        <converters:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter"/>
+
+    </Window.Resources>
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="290"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Grid.Column="0" Grid.Row="0" Header="Reference Data Request" Margin="5 5 5 20">
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" Width="100">Securities</Label>
+                <Label Grid.Column="0" Grid.Row="1" Width="100">Fields</Label>
+                <Label Grid.Column="0" Grid.Row="2" Width="100" ToolTip="Override">*Start Date</Label>
+                <Label Grid.Column="0" Grid.Row="3" Width="100" ToolTip="Override">*End Date</Label>
+                <Label Grid.Column="0" Grid.Row="4" Width="100" ToolTip="Override">*Currency Code</Label>
+
+                <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+                    <TextBox Text="{Binding ReferenceSecurities}" Width="100" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0 0 5 0"/>
+                    <StackPanel VerticalAlignment="Center">
+                        <RadioButton Margin="0 0 5 0"
+                                     GroupName="ReferenceSecurityDatabaseGroup" IsChecked="{Binding ReferenceSecurityDatabase, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static e:SecurityDatabase.Index}}">Index</RadioButton>
+                        <RadioButton GroupName="ReferenceSecurityDatabaseGroup" IsChecked="{Binding ReferenceSecurityDatabase, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static e:SecurityDatabase.Comdty}}">Comdty</RadioButton>
+                    </StackPanel>
+                </StackPanel>
+
+                <TextBox Grid.Column="1" Grid.Row="1" MaxWidth="163" Text="{Binding ReferenceFields}"/>
+
+                <Grid Grid.Column="1" Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <DatePicker SelectedDate="{Binding StartDateReference}"/>
+                    <Button Grid.Column="1" Content=" X " Click="ClearStartDateReference"/>
+                </Grid>
+
+                <Grid Grid.Column="1" Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <DatePicker SelectedDate="{Binding EndDateReference}"/>
+                    <Button Grid.Column="1" Content=" X " Click="ClearEndDateReference"/>
+                </Grid>
+
+                <TextBox Grid.Column="1" Grid.Row="4" MaxWidth="163" Text="{Binding CurrencyCodeReference}"/>
+
+                <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Click="SubmitReferenceDataRequest" Content="Submit"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Column="0" Grid.Row="1" Header="Historical Data Request" Margin="5 5 5 20">
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" Width="100">Securities</Label>
+                <Label Grid.Column="0" Grid.Row="1" Width="100">Fields</Label>
+                <Label Grid.Column="0" Grid.Row="2" Width="100">Start Date</Label>
+                <Label Grid.Column="0" Grid.Row="3" Width="100">End Date</Label>
+                <Label Grid.Column="0" Grid.Row="4" Width="100">Periodicity</Label>
+                <Label Grid.Column="0" Grid.Row="5" Width="100">Currency Code</Label>
+
+                <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+                    <TextBox Text="{Binding HistoricalSecurities}" Width="100" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0 0 5 0"/>
+                    <StackPanel VerticalAlignment="Center">
+                        <RadioButton Margin="0 0 5 0"
+                                     GroupName="HistoricalSecurityDatabaseGroup" IsChecked="{Binding HistoricalSecurityDatabase, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static e:SecurityDatabase.Index}}">Index</RadioButton>
+                        <RadioButton GroupName="HistoricalSecurityDatabaseGroup" IsChecked="{Binding HistoricalSecurityDatabase, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static e:SecurityDatabase.Comdty}}">Comdty</RadioButton>
+                    </StackPanel>
+                </StackPanel>
+
+                <TextBox Grid.Column="1" Grid.Row="1" MaxWidth="163" Text="{Binding HistoricalFields}"/>
+
+                <DatePicker Grid.Column="1" Grid.Row="2" SelectedDate="{Binding StartDateHistorical}"/>
+
+                <DatePicker Grid.Column="1" Grid.Row="3" SelectedDate="{Binding EndDateHistorical}"/>
+
+                <StackPanel Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" Orientation="Horizontal">
+                    <RadioButton Margin="0 0 5 0"
+                                 GroupName="PeriodicityGroup" IsChecked="{Binding Periodicity, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static e:Periodicity.Monthly}}">Monthly</RadioButton>
+                    <RadioButton GroupName="PeriodicityGroup" IsChecked="{Binding Periodicity, Converter={StaticResource RadioButtonCheckedConverter}, ConverterParameter={x:Static e:Periodicity.Daily}}">Daily</RadioButton>
+                </StackPanel>
+
+                <TextBox Grid.Column="1" Grid.Row="5" MaxWidth="163" Text="{Binding CurrencyCodeHistorical}"/>
+
+                <Button Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Click="SubmitHistoricalDataRequest">Submit</Button>
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Column="0" Grid.Row="2" Header="Known Fields" Margin="5 5 5 5">
+            <TextBox TextWrapping="Wrap" AcceptsReturn="True" Text="Reference Fields&#xA;-----&#xA;PX_LAST&#xA;FUT_CUR_GEN_TICKER&#xA;FUT_DLV_DT_LAST&#xA;CUST_TRR_RETURN_HOLDING_PER&#xA;&#xA;Historical Fields&#xA;-----&#xA;PX_LAST&#xA;FUT_CUR_GEN_TICKER&#xA;Indx_Net_Daily_Div"/>
+        </GroupBox>
+
+        <DockPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="3">
+            <CheckBox DockPanel.Dock="Top" Name="ShouldClearCheckBox" HorizontalAlignment="Right" IsChecked="True" Margin="5 5 5 0" FlowDirection="RightToLeft" Content="?Clear before submitting"/>
+            <TextBox DockPanel.Dock="Bottom" Style="{StaticResource Log}" Text="{Binding Log}"/>
+        </DockPanel>
+
+
+    </Grid>
+</Window>
